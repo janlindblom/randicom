@@ -3,6 +3,8 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
+#include "arduino_secrets.h"
+
 // NeoPixel stuff.
 #define NEOPIXEL_PIN 2
 #define NUM_LEDS 5
@@ -18,6 +20,6 @@
 
 // WiFi stuff
 #ifndef STASSID
-#    define STASSID "Uppe"
-#    define STAPSK "95255552"
+#    define STASSID "no-network"
+#    define STAPSK "no-password"
 #endif

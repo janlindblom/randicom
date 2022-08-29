@@ -4,7 +4,6 @@
 // https://opensource.org/licenses/MIT
 
 #include <Arduino.h>
-#include "arduino_secrets.h"
 #include "randi.h"
 #include <Wire.h>
 #include <SPI.h>
@@ -34,7 +33,7 @@ uint32_t green    = strip.Color(0, 255, 0);
 uint32_t blue     = strip.Color(0, 0, 255);
 uint32_t purple   = strip.Color(255, 0, 255);
 uint32_t colors[] = {black, black, black, black, black};
-
+uint8_t  wifi_led = sine[0];
 // OLED stuff.
 uint8_t ucBackBuffer[1024];
 
@@ -82,24 +81,22 @@ const char* encToString(uint8_t enc) {
 }
 
 void wifi_setup() {
-    colors[sine[0]] = black;
+    colors[wifi_led] = black;
     while (!Serial) {
         delay(10);
     }
-    Serial.println("WiFi setup starting...");
-    colors[sine[0]] = purple;
+    colors[wifi_led] = purple;
     if (WiFi.status() == WL_NO_SHIELD) {
-        Serial.println("WiFi shield not present");
-        colors[sine[0]] = red;
+        Serial.println("WiFi shield not present.");
+        colors[wifi_led] = red;
         return;
     }
-    Serial.printf("Beginning scan at %d\n", millis());
     auto cnt = WiFi.scanNetworks();
     if (!cnt) {
-        Serial.printf("No networks found\n");
-        colors[sine[0]] = red;
+        Serial.println("No networks found.");
+        colors[wifi_led] = red;
     } else {
-        colors[sine[0]] = purple;
+        colors[wifi_led] = purple;
         Serial.printf("Found %d networks\n\n", cnt);
         Serial.printf("%32s %5s %17s %2s %4s\n", "SSID", "ENC", "BSSID        ", "CH", "RSSI");
         for (auto i = 0; i < cnt; i++) {
@@ -111,27 +108,25 @@ void wifi_setup() {
 
     multi.addAP(ssid, password);
     if (multi.run() != WL_CONNECTED) {
-        Serial.println("Unable to connect to network...");
-        colors[sine[0]] = red;
+        Serial.println("Unable to connect to network.");
+        colors[wifi_led] = red;
         return;
     }
-    colors[sine[0]] = green;
-    Serial.println("WiFi connected");
-    Serial.println("IP address: ");
+    colors[wifi_led] = green;
     Serial.println(WiFi.localIP());
-    Serial.println("WiFi setup done.");
 }
 
 void wifi_check_status() {
-    colors[sine[0]] = purple;
+    colors[wifi_led] = purple;
     if (WiFi.status() != WL_CONNECTED) {
-        colors[sine[0]] = red;
+        colors[wifi_led] = red;
+        wifi_setup();
     } else {
         int ping = WiFi.ping(WiFi.gatewayIP());
         if (ping > 0) {
-            colors[sine[0]] = green;
+            colors[wifi_led] = green;
         } else {
-            colors[sine[0]] = red;
+            colors[wifi_led] = red;
         }
     }
 }
@@ -140,26 +135,25 @@ void neopixel_setup() {
     while (!Serial) {
         delay(10);
     }
-    // Serial.println("NeoPixel setup starting...");
-    //  gpio_set_function(NEOPIXEL_PIN, GPIO_FUNC_PWM);
     strip.begin();
     strip.setBrightness(30);
     strip.show();
-    // Serial.println("Neopixel setup done.");
 }
 
 void neopixel_update() {
-    for (uint8_t i = 1; i < NUM_LEDS; i++) {
+    for (uint8_t i = 0; i < NUM_LEDS; i++) {
         if (hue >= 65407) {
             hue = 0;
         }
-        uint32_t color  = strip.ColorHSV(hue, 255, 255);
-        colors[sine[i]] = color;
-        delay(100);
+        if (sine[i] != wifi_led) {
+            uint32_t color  = strip.ColorHSV(hue, 255, 255);
+            colors[sine[i]] = color;
+        }
         strip.setPixelColor(sine[i], colors[i]);
         hue += 128;
     }
     strip.show();
+    delay(100);
 }
 
 void setup() {
@@ -168,7 +162,7 @@ void setup() {
 }
 
 void loop() {
-    delay(1000);
+    delay(5000);
     wifi_check_status();
 }
 
