@@ -1,0 +1,8 @@
+{
+    "sketch": "randi.ino",
+    "board": "rp2040:rp2040:rpipicow",
+    "output": "./.build",
+    "intelliSenseGen": "enable",
+    "port": "COM16",
+    "configuration": "flash=2097152_65536,freq=133,opt=Small,rtti=Enabled,stackprotect=Enabled,exceptions=Enabled,dbgport=Disabled,dbglvl=None,usbstack=picosdk,ipstack=ipv4ipv6"
+}
