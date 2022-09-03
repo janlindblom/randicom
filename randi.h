@@ -7,7 +7,7 @@
 
 // NeoPixel stuff.
 #define NEOPIXEL_PIN 2
-#define NUM_LEDS 5
+#define NUM_LEDS 8
 
 // OLED stuff.
 #define SDA0_PIN 8
@@ -17,6 +17,11 @@
 #define FLIP180 1
 #define INVERT 0
 #define USE_HW_I2C 1
+
+// Time stuff
+#define NTP_SERVER1 "0.fi.pool.ntp.org"
+#define NTP_SERVER2 "1.fi.pool.ntp.org"
+#define NTP_TIMEOUT 3600
 
 // WiFi stuff
 #ifndef STASSID
