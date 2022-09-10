@@ -40,14 +40,13 @@ void        ntp_setup(void* param);
 void        display_setup(void* param);
 const char* macToString(uint8_t mac[6]);
 const char* encToString(uint8_t enc);
-void        testdrawline(Adafruit_SSD1327 display);
 void        ps();
 
 std::map<eTaskState, const char*> eTaskStateName{{eReady, "Ready"}, {eRunning, "Running"}, {eBlocked, "Blocked"}, {eSuspended, "Suspended"}, {eDeleted, "Deleted"}};
 
 Adafruit_NeoPixel strip       = Adafruit_NeoPixel(NUM_LEDS, NEOPIXEL_PIN, NEO_GRB);
-Adafruit_SSD1327  disp1       = Adafruit_SSD1327(128, 128, &Wire, RESET_PIN, 100000u, 100000u);
-Adafruit_SSD1327  disp2       = Adafruit_SSD1327(128, 128, &Wire1, RESET_PIN, 100000u, 100000u);
+Adafruit_SSD1327  disp_main   = Adafruit_SSD1327(128, 128, &Wire, RESET_PIN, 100000u, 100000u);
+Adafruit_SSD1327  console     = Adafruit_SSD1327(128, 128, &Wire1, RESET_PIN, 100000u, 100000u);
 const GFXfont     DisplayFont = Org_01;
 
 //  Standard colours
@@ -100,37 +99,36 @@ static const unsigned char PROGMEM logo16_glcd_bmp[] = {
 #define oled_println(s)           \
     {                             \
         if (display_configured) { \
-            disp1.println(s);     \
-            disp1.display();      \
+            console.println(s);   \
+            console.display();    \
         }                         \
     }
 
 #define oled_printf(s)            \
     {                             \
         if (display_configured) { \
-            disp1.printf(s);      \
-            disp1.display();      \
+            console.printf(s);    \
+            console.display();    \
         }                         \
     }
 
 #define oled_printf2(s, p)        \
     {                             \
         if (display_configured) { \
-            disp1.printf(s, p);   \
-            disp1.display();      \
+            console.printf(s, p); \
+            console.display();    \
         }                         \
     }
 
 #define oled_print2(s, p)         \
     {                             \
         if (display_configured) { \
-            disp1.print(s, p);    \
-            disp1.display();      \
+            console.print(s, p);  \
+            console.display();    \
         }                         \
     }
 
 void display_setup(void* param) {
-    disp1.begin(OLED_ADDR);
     static const uint8_t oled_gray[] = {
         // clang-format off
         SSD1327_DISPLAYOFF,
@@ -143,45 +141,37 @@ void display_setup(void* param) {
         SSD1327_DISPLAYON
         // clang-format on
     };
-    disp1.oled_commandList(oled_gray, sizeof(oled_gray));
-    disp1.setFont(&DisplayFont);
-    disp1.setTextColor(SSD1327_WHITE);
-    disp1.clearDisplay();
-    disp1.drawBitmap(disp1.width() / 2 - splash2_width / 2, disp1.height() / 2 - splash2_height / 2, splash2_data, splash2_width, splash2_height, SSD1327_WHITE);
-    disp1.display();
+    disp_main.begin(OLED_ADDR);
+    disp_main.oled_commandList(oled_gray, sizeof(oled_gray));
+    disp_main.setFont(&DisplayFont);
+    disp_main.setTextColor(SSD1327_WHITE);
+
+    console.begin(OLED_ADDR);
+    console.oled_commandList(oled_gray, sizeof(oled_gray));
+    console.setFont(&DisplayFont);
+    console.setTextColor(SSD1327_WHITE);
+
+    disp_main.clearDisplay();
+    console.clearDisplay();
+    disp_main.display();
+    console.display();
+
+    disp_main.drawBitmap(disp_main.width() / 2 - splash2_width / 2, disp_main.height() / 2 - splash2_height / 2, splash2_data, splash2_width, splash2_height, SSD1327_WHITE);
+    console.drawBitmap(console.width() / 2 - splash2_width / 2, console.height() / 2 - splash2_height / 2, splash2_data, splash2_width, splash2_height, SSD1327_WHITE);
+    disp_main.display();
+    console.display();
+
     delay(150);
-    disp1.clearDisplay();
-    disp1.display();
+    console.clearDisplay();
+    disp_main.clearDisplay();
+    disp_main.display();
+    console.display();
+
     display_configured = true;
 }
 
-/**
- * @brief Main startup sequence.
- */
-void setup() {
-    if (!Serial) {
-        Serial.begin(9600);
-    }
-
-    display_setup(NULL);
-    neopixel_setup(NULL);
-}
-
-/**
- * @brief Secondary startup sequence.
- *
- */
-void setup1() {
-    delay(300);
-    wifi_setup(NULL);
-    ntp_setup(NULL);
-}
-
-/**
- * @brief Fast main loop.
- */
-void loop() {
-    delay(100);
+void status_led_update(void* param) {
+    // WiFi connectivity is controlledc by its' own subroutine.
     if (ntp_configured) {
         colors[ntp_led] = green;
     } else {
@@ -192,6 +182,38 @@ void loop() {
     } else {
         colors[display_led] = red;
     }
+}
+
+/**
+ * @brief Main startup sequence.
+ */
+void setup() {
+    if (!Serial) {
+        Serial.begin(9600);
+    }
+    display_setup(NULL);
+    neopixel_setup(NULL);
+}
+
+/**
+ * @brief Secondary startup sequence.
+ *
+ */
+void setup1() {
+    delay(300);
+    if (!Serial) {
+        Serial.begin(9600);
+    }
+    wifi_setup(NULL);
+    ntp_setup(NULL);
+}
+
+/**
+ * @brief Fast main loop.
+ */
+void loop() {
+    delay(100);
+    status_led_update(NULL);
     if (neopixel_configured) {
         neopixel_update(NULL);
     } else if (!neopixel_configured) {
@@ -218,7 +240,7 @@ void loop1() {
 
     if (boot_complete && first_boot) {
         first_boot = false;
-        disp1.clearDisplay();
+        disp_main.clearDisplay();
     }
 
     ps();
@@ -230,14 +252,6 @@ void neopixel_setup(void* param) {
         return;
     }
     neopixel_setup_running = true;
-
-    oled_printf("Black: 0x");
-    oled_print2(black, HEX);
-    oled_printf("\nRed: 0x");
-    oled_print2(red, HEX);
-    oled_printf("\nGreen: 0x");
-    oled_print2(green, HEX);
-    oled_printf("\n");
 
     strip.begin();
     strip.setBrightness(30);
@@ -378,51 +392,6 @@ void ntp_setup(void* param) {
         ntp_configured = true;
     }
     ntp_setup_running = false;
-}
-
-void testdrawline(Adafruit_SSD1327 display) {
-    for (uint8_t i = 0; i < display.width(); i += 4) {
-        display.drawLine(0, 0, i, display.height() - 1, SSD1327_WHITE);
-        display.display();
-    }
-    for (uint8_t i = 0; i < display.height(); i += 4) {
-        display.drawLine(0, 0, display.width() - 1, i, SSD1327_WHITE);
-        display.display();
-    }
-    delay(250);
-
-    display.clearDisplay();
-    for (uint8_t i = 0; i < display.width(); i += 4) {
-        display.drawLine(0, display.height() - 1, i, 0, SSD1327_WHITE);
-        display.display();
-    }
-    for (int8_t i = display.height() - 1; i >= 0; i -= 4) {
-        display.drawLine(0, display.height() - 1, display.width() - 1, i, SSD1327_WHITE);
-        display.display();
-    }
-    delay(250);
-
-    display.clearDisplay();
-    for (int8_t i = display.width() - 1; i >= 0; i -= 4) {
-        display.drawLine(display.width() - 1, display.height() - 1, i, 0, SSD1327_WHITE);
-        display.display();
-    }
-    for (int8_t i = display.height() - 1; i >= 0; i -= 4) {
-        display.drawLine(display.width() - 1, display.height() - 1, 0, i, SSD1327_WHITE);
-        display.display();
-    }
-    delay(250);
-
-    display.clearDisplay();
-    for (uint8_t i = 0; i < display.height(); i += 4) {
-        display.drawLine(display.width() - 1, 0, 0, i, SSD1327_WHITE);
-        display.display();
-    }
-    for (uint8_t i = 0; i < display.width(); i += 4) {
-        display.drawLine(display.width() - 1, 0, i, display.height() - 1, SSD1327_WHITE);
-        display.display();
-    }
-    delay(250);
 }
 
 void ps() {
