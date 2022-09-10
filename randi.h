@@ -5,22 +5,37 @@
 
 #include "arduino_secrets.h"
 
-// NeoPixel stuff.
-#define NEOPIXEL_PIN 2
+#define NEOPIXEL_PIN (2u)
 #define NUM_LEDS 8
 
 // OLED stuff.
-#define SDA0_PIN 8
-#define SCL0_PIN 9
 #define RESET_PIN -1
 #define OLED_ADDR 0x3c
-#define FLIP180 1
+#define FLIP180 0
 #define INVERT 0
-#define USE_HW_I2C 1
+
+#define SSD1327_SCROLLING_START 0x2F
+#define SSD1327_SCROLLING_STOP 0x2E
+#define SSD1327_SCROLLING_RIGHT 0x26
+#define SSD1327_SCROLLING_LEFT 0x27
+
+// Scroll rate constants. See datasheet page 40.
+#define SSD1327_SCROLL_2 0b111
+#define SSD1327_SCROLL_3 0b100
+#define SSD1327_SCROLL_4 0b101
+#define SSD1327_SCROLL_5 0b110
+#define SSD1327_SCROLL_6 0b000
+#define SSD1327_SCROLL_32 0b001
+#define SSD1327_SCROLL_64 0b010
+#define SSD1327_SCROLL_256 0b011
 
 // Time stuff
-#define NTP_SERVER1 "0.fi.pool.ntp.org"
-#define NTP_SERVER2 "1.fi.pool.ntp.org"
+#ifndef NTP_SERVER1
+#    define NTP_SERVER1 "0.fi.pool.ntp.org"
+#endif
+#ifndef NTP_SERVER2
+#    define NTP_SERVER2 "1.fi.pool.ntp.org"
+#endif
 #define NTP_TIMEOUT 3600
 
 // WiFi stuff
