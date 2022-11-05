@@ -1,8 +1,6 @@
 {
-    "output": ".build",
-    "intelliSenseGen": "enable",
-    "port": "COM16",
-    "configuration": "flash=2097152_65536,freq=133,opt=Small,rtti=Enabled,stackprotect=Enabled,exceptions=Enabled,dbgport=Serial,dbglvl=All,usbstack=picosdk,ipstack=ipv4only",
+    "sketch": "randi.ino",
+    "configuration": "flash=2097152_65536,freq=133,opt=Debug,rtti=Enabled,stackprotect=Enabled,exceptions=Enabled,dbgport=Serial,dbglvl=All,usbstack=picosdk,wificountry=finland,ipstack=ipv4only",
     "board": "rp2040:rp2040:rpipicow",
-    "sketch": "randi.ino"
+    "output": ".build"
 }

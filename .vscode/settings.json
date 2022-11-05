@@ -1,4 +1,18 @@
 {
     "extensions.ignoreRecommendations": false,
-    "arduino.disableIntelliSenseAutoGen": false
+    "files.associations": {
+        "*.cps": "javascript",
+        "*.arb": "json",
+        "*.jsonschema": "jsonc",
+        "*.h": "cpp",
+        "*.ino": "cpp",
+        "*.tcc": "cpp",
+        "memory_resource": "cpp",
+        "ostream": "cpp",
+        "streambuf": "cpp",
+        "exception": "cpp",
+        "iosfwd": "cpp",
+        "new": "cpp",
+        "cstdio": "cpp"
+    }
 }
