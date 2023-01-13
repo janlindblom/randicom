@@ -6,16 +6,6 @@
 #include <Arduino.h>
 #include "randi.h"
 
-#include <FreeRTOS.h>
-#include <map>
-#include <atomic.h>
-#include <croutine.h>
-#include <event_groups.h>
-#include <FreeRTOSConfig.h>
-#include <rp2040_config.h>
-#include <semphr.h>
-#include <task.h>
-
 #include <Wire.h>
 #include <SPI.h>
 #include <WiFi.h>
@@ -31,20 +21,21 @@
 #include <Adafruit_NeoPixel.h>
 //#include <Adafruit_I2CDevice.h>
 //#include <Adafruit_GrayOLED.h>
-//#include <Adafruit_SSD1327.h>
-//#include <splash.h>
+#include <Adafruit_SSD1327.h>
+#include <splash.h>
 //#include <Fonts/FreeMono9pt7b.h>
 //#include "fonts/InputMono_Regular4pt7b.h"
 //#include "fonts/FSEX302_alt4pt7b.h"
 // #include <lcdgfx.h>
-#include <U8g2lib.h>
+//#include <U8g2lib.h>
+//#include <U8g2_for_Adafruit_GFX.h>
 
 #include <stdarg.h>
 
 #define U8LOG_WIDTH 22
 #define U8LOG_HEIGHT 17
 uint8_t u8log_buffer[U8LOG_WIDTH * U8LOG_HEIGHT];
-U8G2LOG u8g2log;
+//U8G2LOG u8g2log;
 
 void        neopixel_setup(void* param);
 void        neopixel_update(void* param);
@@ -53,15 +44,13 @@ void        ntp_setup(void* param);
 void        display_setup(void* param);
 const char* macToString(uint8_t mac[6]);
 const char* encToString(uint8_t enc);
-void        ps();
-
-std::map<eTaskState, const char*> eTaskStateName{{eReady, "Ready"}, {eRunning, "Running"}, {eBlocked, "Blocked"}, {eSuspended, "Suspended"}, {eDeleted, "Deleted"}};
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_LEDS, NEOPIXEL_PIN, NEO_GRB);
-// Adafruit_SSD1327  monitor = Adafruit_SSD1327(128, 128, &Wire, RESET_PIN, 100000u, 100000u);
-// Adafruit_SSD1327  console = Adafruit_SSD1327(128, 128, &Wire1, RESET_PIN, 100000u, 100000u);
+Adafruit_SSD1327  monitor = Adafruit_SSD1327(128, 128, &Wire, RESET_PIN, 100000u, 100000u);
+Adafruit_SSD1327  console = Adafruit_SSD1327(128, 128, &Wire1, RESET_PIN, 100000u, 100000u);
 
-U8G2_SSD1327_WS_128X128_F_HW_I2C con(U8G2_R0, /* reset=*/U8X8_PIN_NONE); //, /* clock=*/27, /* data=*/26);
+//U8G2_SSD1327_WS_128X128_F_HW_I2C con(U8G2_R0, /* reset=*/U8X8_PIN_NONE, /* clock=*/27, /* data=*/26);
+//U8G2_SSD1327_WS_128X128_F_2ND_HW_I2C mon(U8G2_R0, /* reset=*/U8X8_PIN_NONE);
 
 // U8G2_SSD1327_EA_W128128_2_HW_I2C     con(U8G2_R0, /* reset=*/U8X8_PIN_NONE); // , /* clock=*/5, /* data=*/4);
 // U8G2_SSD1327_EA_W128128_2_2ND_HW_I2C mon(U8G2_R0, /* reset=*/U8X8_PIN_NONE); // , /* clock=*/27, /* data=*/26);
@@ -212,41 +201,47 @@ const char* encToString(uint8_t enc) {
     };
 
 void display_setup(void* param) {
-    // monitor.begin(OLED_ADDR);
-    // console.begin(OLED_ADDR);
-    // monitor.setTextSize(1);
-    // console.setTextSize(1);
+    monitor.begin(OLED_ADDR);
+    console.begin(OLED_ADDR);
+    monitor.setTextSize(1);
+    console.setTextSize(1);
     // monitor.setFont(&DisplayFont);
     // console.setFont(&DisplayFont);
     // monitor.setTextColor(SSD1327_WHITE, SSD1327_BLACK);
     // console.setTextColor(SSD1327_WHITE, SSD1327_BLACK);
 
-    // monitor.clearDisplay();
-    // console.clearDisplay();
+    monitor.clearDisplay();
+    console.clearDisplay();
 
-    // monitor.drawBitmap(monitor.width() / 2 - splash2_width / 2, monitor.height() / 2 - splash2_height / 2, splash2_data, splash2_width, splash2_height, SSD1327_WHITE);
-    // console.drawBitmap(console.width() / 2 - splash2_width / 2, console.height() / 2 - splash2_height / 2, splash2_data, splash2_width, splash2_height, SSD1327_WHITE);
-    // monitor.display();
-    // console.display();
+    monitor.drawBitmap(monitor.width() / 2 - splash2_width / 2, monitor.height() / 2 - splash2_height / 2, splash2_data, splash2_width, splash2_height, SSD1327_WHITE);
+    console.drawBitmap(console.width() / 2 - splash2_width / 2, console.height() / 2 - splash2_height / 2, splash2_data, splash2_width, splash2_height, SSD1327_WHITE);
+    monitor.display();
+    console.display();
 
-    // delay(150);
-    // console.clearDisplay();
-    //  monitor.clearDisplay();
-    //  monitor.display();
-    // console.display();
+    delay(150);
+    console.clearDisplay();
+    monitor.clearDisplay();
+    monitor.display();
+    console.display();
 
-    // monitor.setCursor(0, 6);
-    // console.setCursor(0, 6);
+    monitor.setCursor(0, 6);
+    console.setCursor(0, 6);
 
     // con.setBusClock(400000);
-    
+    /*
     con.begin();
     con.setContrast(160);
+    mon.begin();
+    mon.setContrast(160);
+    */
     // mon.begin();
-    con.setFont(u8g2_font_5x7_tr); // set the font for the terminal window
+    /*
+    con.setFont(u8g2_font_helvR08_tf); // set the font for the terminal window
+    mon.setFont(u8g2_font_helvR08_tf); // set the font for the terminal window
     u8g2log.begin(U8LOG_WIDTH, U8LOG_HEIGHT, u8log_buffer);
-    u8g2log.setLineHeightOffset(0); // set extra space between lines in pixel, this can be negative
+    u8g2log.setLineHeightOffset(1); // set extra space between lines in pixel, this can be negative
     u8g2log.setRedrawMode(0);       // 0: Update screen with newline, 1: Update screen for every char
+    */    
 
     display_configured = true;
 }
@@ -314,10 +309,10 @@ void loop() {
         u8g2log.print("\n");
     */
     // print the log window
-    con.firstPage();
-    do {
-        con.drawLog(0, 10, u8g2log); // draw the log content on the display
-    } while (con.nextPage());
+    //mon.firstPage();
+    //do {
+    //    mon.drawLog(0, 10, u8g2log); // draw the log content on the display
+    //} while (mon.nextPage());
 }
 
 /**
@@ -338,11 +333,9 @@ void loop1() {
     }
 
     if (first_boot && boot_complete) {
-        u8g2log.println("System Initialised.");
+        console_println("System Initialised.");
         first_boot = false;
     }
-
-    ps();
 }
 
 void neopixel_setup(void* param) {
@@ -379,13 +372,13 @@ void wifi_check_status(void* param) {
     colors[wifi_led] = col_working;
 
     if (WiFi.status() == WL_CONNECTION_LOST || WiFi.status() == WL_DISCONNECTED) {
-        u8g2log.println("[N] WiFi connection lost...");
+        console_println("[N] WiFi connection lost...");
         wifi_connected   = false;
         colors[wifi_led] = col_waiting;
     }
 
     if (multi.run() != WL_CONNECTED) {
-        u8g2log.println("[N] Unable to connect to network.");
+        console_println("[N] Unable to connect to network.");
         colors[wifi_led] = col_bad;
         wifi_connected   = false;
         wifi_setup(NULL);
@@ -394,7 +387,7 @@ void wifi_check_status(void* param) {
         if (ping > 0) {
             colors[wifi_led] = col_good;
         } else {
-            u8g2log.println("[N] Unable to reach network gateway...");
+            console_println("[N] Unable to reach network gateway...");
             colors[wifi_led] = col_bad;
             wifi_connected   = false;
             wifi_setup(NULL);
@@ -409,26 +402,26 @@ void wifi_setup(void* param) {
     }
     wifi_setup_running = true;
 
-    u8g2log.println("[N] Configuring WiFi...");
+    console_println("[N] Configuring WiFi...");
     colors[wifi_led] = col_waiting;
     if (WiFi.status() == WL_NO_SHIELD) {
-        u8g2log.println("[N] WiFi shield not present.");
+        console_println("[N] WiFi shield not present.");
         colors[wifi_led]   = col_bad;
         wifi_connected     = false;
         wifi_setup_running = false;
         return;
     }
-    u8g2log.println("[N] Scanning for networks...");
+    console_println("[N] Scanning for networks...");
     auto cnt = WiFi.scanNetworks();
     if (!cnt) {
-        u8g2log.println("[N] No networks found.");
+        console_println("[N] No networks found.");
         colors[wifi_led]   = col_bad;
         wifi_connected     = false;
         wifi_setup_running = false;
         return;
     } else {
         colors[wifi_led] = col_working;
-        u8g2log.printf("[N] Found %d networks\n", cnt);
+        console_printf2("[N] Found %d networks\n", cnt);
         if (Serial) {
             Serial.printf("%32s %5s %17s %2s %4s\n", "SSID", "ENC", "BSSID        ", "CH", "RSSI");
         }
@@ -442,10 +435,10 @@ void wifi_setup(void* param) {
     }
 
     if (!wifi_ap_configured) {
-        u8g2log.printf("[N] Adding network: %s\n", ssid);
+        console_printf2("[N] Adding network: %s\n", ssid);
         if (multi.addAP(ssid, password)) {
 #ifdef SECSSID
-            u8g2log.printf("[N] Adding network: %s\n", ssid2);
+            console_printf2("[N] Adding network: %s\n", ssid2);
             if (multi.addAP(ssid2, password2)) {
 #endif
                 wifi_ap_configured = true;
@@ -456,7 +449,7 @@ void wifi_setup(void* param) {
     }
 
     if (multi.run() != WL_CONNECTED) {
-        u8g2log.println("[N] Unable to connect to network.");
+        console_println("[N] Unable to connect to network.");
         colors[wifi_led]   = col_bad;
         wifi_connected     = false;
         wifi_setup_running = false;
@@ -464,7 +457,7 @@ void wifi_setup(void* param) {
     }
     wifi_connected   = true;
     colors[wifi_led] = col_good;
-    u8g2log.println("[N] WiFi connected.");
+    console_println("[N] WiFi connected.");
     wifi_configured    = true;
     wifi_setup_running = false;
 }
@@ -478,7 +471,7 @@ void ntp_setup(void* param) {
     ntp_setup_running = true;
     if (wifi_configured && !ntp_configured) {
         colors[ntp_led] = col_working;
-        u8g2log.println("[T] Configuring NTP...");
+        console_println("[T] Configuring NTP...");
         NTP.begin(NTP_SERVER1, NTP_SERVER2, NTP_TIMEOUT);
         if (NTP.running()) {
             colors[ntp_led] = col_good;
@@ -486,22 +479,7 @@ void ntp_setup(void* param) {
             colors[ntp_led] = col_bad;
         }
         ntp_configured = true;
-        u8g2log.println("[T] NTP comfigured.");
+        console_println("[T] NTP comfigured.");
     }
     ntp_setup_running = false;
-}
-
-void ps() {
-    int           tasks             = uxTaskGetNumberOfTasks();
-    TaskStatus_t* pxTaskStatusArray = new TaskStatus_t[tasks];
-    unsigned long runtime;
-    tasks = uxTaskGetSystemState(pxTaskStatusArray, tasks, &runtime);
-    u8g2log.printf("[P] Tasks: %d\n", tasks);
-    u8g2log.printf("%-10s %10s\n", "NAME", "STATE");
-    // console.display();
-    for (int i = 0; i < tasks; i++) {
-        u8g2log.printf("%-10s %10s\n", pxTaskStatusArray[i].pcTaskName, eTaskStateName[pxTaskStatusArray[i].eCurrentState]);
-        // console.display();
-    }
-    delete[] pxTaskStatusArray;
 }

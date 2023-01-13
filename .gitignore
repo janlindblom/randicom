@@ -4,4 +4,5 @@ arduino_secrets.h
 /.build
 fonts/InputMono*
 fonts/FSEX*
+/build
 
