@@ -241,7 +241,7 @@ void display_setup(void* param) {
     u8g2log.begin(U8LOG_WIDTH, U8LOG_HEIGHT, u8log_buffer);
     u8g2log.setLineHeightOffset(1); // set extra space between lines in pixel, this can be negative
     u8g2log.setRedrawMode(0);       // 0: Update screen with newline, 1: Update screen for every char
-    */    
+    */
 
     display_configured = true;
 }

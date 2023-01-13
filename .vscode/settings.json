@@ -14,5 +14,13 @@
         "iosfwd": "cpp",
         "new": "cpp",
         "cstdio": "cpp"
-    }
+    },
+    "arduino.additionalUrls": [
+        "https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json"
+    ],
+    "arduino.useArduinoCli": true,
+    "arduino.analyzeOnOpen": false,
+    "arduino.clearOutputOnBuild": false,
+    "arduino.disableIntelliSenseAutoGen": true,
+    "arduino.skipHeaderProvider": true
 }
