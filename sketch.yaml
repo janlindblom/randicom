@@ -1,0 +1,33 @@
+profiles:
+  pico:
+    notes: Default profile, will work on Pico W.
+    fqbn: rp2040:rp2040:rpipicow:flash=2097152_65536,rtti=Enabled,stackprotect=Enabled,exceptions=Enabled,wificountry=finland
+    platforms:
+      - platform: rp2040:rp2040 (2.7.0)
+        platform_index_url: https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json
+    libraries:
+      - Adafruit NeoPixel (1.10.7)
+      - Adafruit SSD1327 (1.0.4)
+      - Adafruit GFX Library (1.11.3)
+      - Adafruit BusIO (1.14.1)
+  pico-debug:
+    notes: Default profile, will work on Pico W.
+    fqbn: rp2040:rp2040:rpipicow:flash=2097152_65536,opt=Debug,rtti=Enabled,stackprotect=Enabled,exceptions=Enabled,dbgport=Serial,dbglvl=All,wificountry=finland
+    platforms:
+      - platform: rp2040:rp2040 (2.7.0)
+        platform_index_url: https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json
+    libraries:
+      - Adafruit NeoPixel (1.10.7)
+      - Adafruit SSD1327 (1.0.4)
+      - Adafruit GFX Library (1.11.3)
+      - Adafruit BusIO (1.14.1)
+  mbed:
+    notes: Alternative profile, uses Mbed OS. Does not work since there's no wifi in Mbed yet.
+    fqbn: arduino:mbed_rp2040:pico
+    platforms:
+      - platform: arduino:mbed_rp2040 (3.5.1)
+    libraries:
+      - Adafruit NeoPixel (1.10.7)
+      - Adafruit SSD1327 (1.0.4)
+      - Adafruit GFX Library (1.11.3)
+      - Adafruit BusIO (1.14.1)

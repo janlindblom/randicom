@@ -2,5 +2,5 @@
     "sketch": "randi.ino",
     "configuration": "flash=2097152_65536,freq=133,opt=Debug,rtti=Enabled,stackprotect=Enabled,exceptions=Enabled,dbgport=Serial,dbglvl=All,usbstack=picosdk,wificountry=finland,ipstack=ipv4only",
     "board": "rp2040:rp2040:rpipicow",
-    "output": ".build"
+    "output": "build"
 }
