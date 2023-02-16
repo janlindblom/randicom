@@ -8,7 +8,9 @@
 #define NEOPIXEL_PIN (2u)
 #define NUM_LEDS 8
 
-#define DPI 121 // The 1.5" SSD1327 displays have a DPI/PPI of 121 instead of the default 141.
+#define DPI                                                                    \
+  121 // The 1.5" SSD1327 displays have a DPI/PPI of 121 instead of the default
+      // 141.
 
 //  NeoPixel colours
 #define black 0x000000
@@ -51,23 +53,23 @@
 
 // Time stuff
 #ifndef NTP_SERVER1
-#    define NTP_SERVER1 "0.fi.pool.ntp.org"
+#define NTP_SERVER1 "0.fi.pool.ntp.org"
 #endif
 #ifndef NTP_SERVER2
-#    define NTP_SERVER2 "1.fi.pool.ntp.org"
+#define NTP_SERVER2 "1.fi.pool.ntp.org"
 #endif
 #define NTP_TIMEOUT 3600
 
 // WiFi stuff
 #ifndef STASSID
-#    define STASSID "no-network"
-#    define STAPSK "no-password"
+#define STASSID "no-network"
+#define STAPSK "no-password"
 #endif
 
-void        neopixel_setup(void* param);
-void        neopixel_update(void* param);
-void        wifi_setup(void* param);
-void        ntp_setup(void* param);
-void        display_setup(void* param);
-const char* macToString(uint8_t mac[6]);
-const char* encToString(uint8_t enc);
+void neopixel_setup(void *param);
+void neopixel_update(void *param);
+void wifi_setup(void *param);
+void ntp_setup(void *param);
+void display_setup(void *param);
+const char *macToString(uint8_t mac[6]);
+const char *encToString(uint8_t enc);
