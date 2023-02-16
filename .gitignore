@@ -1,0 +1,4 @@
+.pio
+build
+include/arduino_secrets.h
+.vscode
