@@ -23,6 +23,14 @@
 #include <Adafruit_SSD1327.h>
 #include <splash.h>
 
+void neopixel_setup(void *param);
+void neopixel_update(void *param);
+void wifi_setup(void *param);
+void ntp_setup(void *param);
+void display_setup(void *param);
+const char *macToString(uint8_t mac[6]);
+const char *encToString(uint8_t enc);
+
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_LEDS, NEOPIXEL_PIN, NEO_GRB);
 Adafruit_SSD1327 monitor =
     Adafruit_SSD1327(128, 128, &Wire, RESET_PIN, 100000u, 100000u);

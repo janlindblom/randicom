@@ -65,11 +65,3 @@
 #define STASSID "no-network"
 #define STAPSK "no-password"
 #endif
-
-void neopixel_setup(void *param);
-void neopixel_update(void *param);
-void wifi_setup(void *param);
-void ntp_setup(void *param);
-void display_setup(void *param);
-const char *macToString(uint8_t mac[6]);
-const char *encToString(uint8_t enc);
