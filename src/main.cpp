@@ -6,30 +6,25 @@
 #include "randi.h"
 #include <Arduino.h>
 
-#include <SPI.h>
+
+#include <Wire.h>
+
 #include <WiFi.h>
 #include <WiFiMulti.h>
 #include <WiFiNTP.h>
 #include <WiFiUdp.h>
-#include <Wire.h>
+
 
 #include <stdarg.h>
 #include <sys/time.h>
 #include <time.h>
+
 
 #include <Adafruit_NeoPixel.h>
 // #include <Adafruit_I2CDevice.h>
 #include <Adafruit_GrayOLED.h>
 #include <Adafruit_SSD1327.h>
 #include <splash.h>
-
-void neopixel_setup(void *param);
-void neopixel_update(void *param);
-void wifi_setup(void *param);
-void ntp_setup(void *param);
-void display_setup(void *param);
-const char *macToString(uint8_t mac[6]);
-const char *encToString(uint8_t enc);
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_LEDS, NEOPIXEL_PIN, NEO_GRB);
 Adafruit_SSD1327 monitor =
@@ -64,9 +59,7 @@ volatile bool ntp_setup_running = false;
 volatile bool ntp_configured = false;
 volatile bool neopixel_setup_running = false;
 volatile bool neopixel_configured = false;
-volatile bool console_configured = false;
-volatile bool monitor_configured = false;
-volatile bool display_configured = false;
+
 volatile bool first_boot = true;
 
 const uint_fast8_t wifi_led = 7;
@@ -84,65 +77,6 @@ WiFiMulti multi;
 #define boot_complete                                                          \
   (wifi_configured && wifi_ap_configured && ntp_configured &&                  \
    neopixel_configured && display_configured)
-
-void display_setup(void *param) {
-  if (Serial) {
-    Serial.println("Setting up display...");
-  }
-
-  console.begin(OLED_ADDR);
-  monitor.begin(OLED_ADDR);
-
-  console.setTextSize(1);
-  monitor.setTextSize(1);
-  //  console.setFont(&DisplayFont);
-  //  monitor.setFont(&DisplayFont);
-  console.setTextColor(SSD1327_WHITE, SSD1327_BLACK);
-  monitor.setTextColor(SSD1327_WHITE, SSD1327_BLACK);
-
-  console.clearDisplay();
-  monitor.clearDisplay();
-
-  console.drawBitmap(monitor.width() / 2 - splash2_width / 2,
-                     monitor.height() / 2 - splash2_height / 2, splash2_data,
-                     splash2_width, splash2_height, SSD1327_WHITE);
-  monitor.drawBitmap(monitor.width() / 2 - splash2_width / 2,
-                     monitor.height() / 2 - splash2_height / 2, splash2_data,
-                     splash2_width, splash2_height, SSD1327_WHITE);
-  console.display();
-  monitor.display();
-
-  delay(150);
-  console.clearDisplay();
-  monitor.clearDisplay();
-  console.display();
-  monitor.display();
-
-  // con.setBusClock(400000);
-  /*
-
-  mon.begin();
-  mon.setContrast(160);
-  */
-
-  // console_configured = console.begin();
-  //   console.clearBuffer();
-  //   console.setContrast(160);
-  /*
-      console.setFont(u8g2_font_5x8_mf);
-      // console.setFont(u8g2_font_helvR08_tf); // set the font for the terminal
-     window u8g2log.begin(U8LOG_WIDTH, U8LOG_HEIGHT, u8log_buffer);
-      u8g2log.setLineHeightOffset(1); // set extra space between lines in pixel,
-     this can be negative u8g2log.setRedrawMode(0);       // 0: Update screen
-     with newline, 1: Update screen for every char
-
-      console.print("Console initialised.\n");
-      // monitor_configured = monitor.begin();
-      // console.print("Monitor initialised.\n");
-      console.print("Displays initialised.\n");
-      */
-  display_configured = true;
-}
 
 void status_led_update(void *param) {
   // WiFi connectivity is controlledc by its' own subroutine.
