@@ -1,4 +1,5 @@
-.pio
-build
+.pio/
+build/
 include/arduino_secrets.h
-.vscode
+.vscode/
+/data/

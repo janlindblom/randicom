@@ -3,27 +3,25 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-#include "randi.h"
+#include <Adafruit_NeoPixel.h>
 #include <Arduino.h>
-
-#include <Wire.h>
-
 #include <WiFi.h>
 #include <WiFiMulti.h>
 #include <WiFiNTP.h>
 #include <WiFiUdp.h>
-
+#include <Wire.h>
 #include <stdarg.h>
 #include <sys/time.h>
 #include <time.h>
 
-#include <Adafruit_NeoPixel.h>
+#include "randi.h"
+
 // #include <Adafruit_I2CDevice.h>
 #include <Adafruit_SSD1327.h>
 
 Adafruit_NeoPixel strip   = Adafruit_NeoPixel(NUM_LEDS, NEOPIXEL_PIN, NEO_GRB);
-Adafruit_SSD1327 monitor = Adafruit_SSD1327(128, 128, &Wire, RESET_PIN, 100000u, 100000u);
-Adafruit_SSD1327 console = Adafruit_SSD1327(128, 128, &Wire1, RESET_PIN, 100000u, 100000u);
+Adafruit_SSD1327  monitor = Adafruit_SSD1327(128, 128, &Wire, RESET_PIN, 100000u, 100000u);
+Adafruit_SSD1327  console = Adafruit_SSD1327(128, 128, &Wire1, RESET_PIN, 100000u, 100000u);
 
 // U8G2_SSD1327_WS_128X128_F_SW_I2C console(U8G2_R0, /* reset=*/U8X8_PIN_NONE,
 // /* clock=*/27, /* data=*/26); U8G2_SSD1327_WS_128X128_F_SW_I2C
@@ -43,14 +41,14 @@ Adafruit_SSD1327 console = Adafruit_SSD1327(128, 128, &Wire1, RESET_PIN, 100000u
 volatile uint_fast16_t hue      = 0;
 volatile uint32_t      colors[] = {black, black, black, black, black, black, black, black};
 
-volatile bool wifi_setup_running     = false;
-volatile bool wifi_configured        = false;
-volatile bool wifi_connected         = false;
-volatile bool wifi_ap_configured     = false;
-volatile bool ntp_setup_running      = false;
-volatile bool ntp_configured         = false;
-volatile bool neopixel_setup_running = false;
-volatile bool neopixel_configured    = false;
+volatile bool        wifi_setup_running     = false;
+volatile bool        wifi_configured        = false;
+volatile bool        wifi_connected         = false;
+volatile bool        wifi_ap_configured     = false;
+volatile bool        ntp_setup_running      = false;
+volatile bool        ntp_configured         = false;
+volatile bool        neopixel_setup_running = false;
+volatile bool        neopixel_configured    = false;
 extern volatile bool display_configured;
 
 volatile bool first_boot = true;

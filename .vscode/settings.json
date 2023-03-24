@@ -1,0 +1,13 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/.pio": true
+    },
+    "cmake.configureOnOpen": false,
+    "C_Cpp.codeAnalysis.exclude": {
+        "**/.pio": true
+    },
+    "C_Cpp.codeAnalysis.runAutomatically": true
+}
