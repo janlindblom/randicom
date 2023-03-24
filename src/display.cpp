@@ -4,6 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 #include "display.h"
+#include <splash.h>
 
 volatile bool display_configured = false;
 

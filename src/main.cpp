@@ -19,13 +19,11 @@
 
 #include <Adafruit_NeoPixel.h>
 // #include <Adafruit_I2CDevice.h>
-#include <Adafruit_GrayOLED.h>
 #include <Adafruit_SSD1327.h>
-#include <splash.h>
 
 Adafruit_NeoPixel strip   = Adafruit_NeoPixel(NUM_LEDS, NEOPIXEL_PIN, NEO_GRB);
-Adafruit_SSD1327  monitor = Adafruit_SSD1327(128, 128, &Wire, RESET_PIN, 100000u, 100000u);
-Adafruit_SSD1327  console = Adafruit_SSD1327(128, 128, &Wire1, RESET_PIN, 100000u, 100000u);
+Adafruit_SSD1327 monitor = Adafruit_SSD1327(128, 128, &Wire, RESET_PIN, 100000u, 100000u);
+Adafruit_SSD1327 console = Adafruit_SSD1327(128, 128, &Wire1, RESET_PIN, 100000u, 100000u);
 
 // U8G2_SSD1327_WS_128X128_F_SW_I2C console(U8G2_R0, /* reset=*/U8X8_PIN_NONE,
 // /* clock=*/27, /* data=*/26); U8G2_SSD1327_WS_128X128_F_SW_I2C

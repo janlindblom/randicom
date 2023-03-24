@@ -3,9 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-#include <Adafruit_GrayOLED.h>
 #include <Adafruit_SSD1327.h>
-#include <splash.h>
 
 #define OLED_ADDR 0x3c
 
@@ -28,7 +26,5 @@
 
 extern Adafruit_SSD1327 monitor;
 extern Adafruit_SSD1327 console;
-
-volatile bool display_configured;
 
 void display_setup(void *param);

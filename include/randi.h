@@ -49,12 +49,13 @@
 #    define STAPSK "no-password"
 #endif
 
-Adafruit_SSD1327 monitor;
-Adafruit_SSD1327 console;
+extern Adafruit_SSD1327 monitor;
+extern Adafruit_SSD1327 console;
 
 extern volatile bool display_configured;
 
 void neopixel_setup(void *param);
 void neopixel_update(void *param);
 void wifi_setup(void *param);
+void wifi_check_status(void *param);
 void ntp_setup(void *param);
