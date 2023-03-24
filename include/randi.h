@@ -5,6 +5,7 @@
 
 #include "arduino_secrets.h"
 #include "display.h"
+#include "util.h"
 
 #define NEOPIXEL_PIN (2u)
 #define NUM_LEDS 8
@@ -35,22 +36,25 @@
 
 // Time stuff
 #ifndef NTP_SERVER1
-#define NTP_SERVER1 "0.fi.pool.ntp.org"
+#    define NTP_SERVER1 "0.fi.pool.ntp.org"
 #endif
 #ifndef NTP_SERVER2
-#define NTP_SERVER2 "1.fi.pool.ntp.org"
+#    define NTP_SERVER2 "1.fi.pool.ntp.org"
 #endif
 #define NTP_TIMEOUT 3600
 
 // WiFi stuff
 #ifndef STASSID
-#define STASSID "no-network"
-#define STAPSK "no-password"
+#    define STASSID "no-network"
+#    define STAPSK "no-password"
 #endif
+
+Adafruit_SSD1327 monitor;
+Adafruit_SSD1327 console;
+
+extern volatile bool display_configured;
 
 void neopixel_setup(void *param);
 void neopixel_update(void *param);
 void wifi_setup(void *param);
 void ntp_setup(void *param);
-const char *macToString(uint8_t mac[6]);
-const char *encToString(uint8_t enc);

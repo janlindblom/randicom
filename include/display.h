@@ -9,9 +9,7 @@
 
 #define OLED_ADDR 0x3c
 
-#define DPI                                                                    \
-  121 // The 1.5" SSD1327 displays have a DPI/PPI of 121 instead of the default
-      // 141.
+#define DPI 121 // The 1.5" SSD1327 displays have a DPI/PPI of 121 instead of the default 141.
 
 #define SSD1327_SCROLLING_START 0x2F
 #define SSD1327_SCROLLING_STOP 0x2E
@@ -31,8 +29,6 @@
 extern Adafruit_SSD1327 monitor;
 extern Adafruit_SSD1327 console;
 
-volatile bool console_configured;
-volatile bool monitor_configured;
 volatile bool display_configured;
 
 void display_setup(void *param);
