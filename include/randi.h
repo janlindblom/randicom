@@ -4,8 +4,6 @@
 // https://opensource.org/licenses/MIT
 
 #include "arduino_secrets.h"
-#include "display.h"
-#include "util.h"
 
 #define NEOPIXEL_PIN (2u)
 #define NUM_LEDS 8
@@ -49,13 +47,9 @@
 #    define STAPSK "no-password"
 #endif
 
-extern Adafruit_SSD1327 monitor;
-extern Adafruit_SSD1327 console;
-
-extern volatile bool display_configured;
-
 void neopixel_setup(void *param);
 void neopixel_update(void *param);
 void wifi_setup(void *param);
 void wifi_check_status(void *param);
 void ntp_setup(void *param);
+

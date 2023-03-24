@@ -3,6 +3,7 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
+#include <WiFi.h>
 #include "util.h"
 
 const char *macToString(uint8_t mac[6]) {

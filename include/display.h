@@ -27,4 +27,6 @@
 extern Adafruit_SSD1327 monitor;
 extern Adafruit_SSD1327 console;
 
+extern volatile bool display_configured;
+
 void display_setup(void *param);

@@ -15,6 +15,8 @@
 #include <time.h>
 
 #include "randi.h"
+#include "display.h"
+#include "util.h"
 
 // #include <Adafruit_I2CDevice.h>
 #include <Adafruit_SSD1327.h>
