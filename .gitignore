@@ -3,3 +3,4 @@ build/
 include/arduino_secrets.h
 .vscode/
 /data/
+*cache

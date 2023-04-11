@@ -155,7 +155,6 @@ void loop1() {
     }
 
     if (first_boot && boot_complete) {
-        // console.print("System Initialised.\n");
         first_boot = false;
     }
 }
@@ -194,13 +193,11 @@ void wifi_check_status(void *param) {
     colors[wifi_led] = col_working;
 
     if (WiFi.status() == WL_CONNECTION_LOST || WiFi.status() == WL_DISCONNECTED) {
-        // console.print("[N] WiFi connection lost...\n");
         wifi_connected   = false;
         colors[wifi_led] = col_waiting;
     }
 
     if (multi.run() != WL_CONNECTED) {
-        // console.print("[N] Unable to connect to network.\n");
         colors[wifi_led] = col_bad;
         wifi_connected   = false;
         // wifi_setup(NULL);
@@ -211,7 +208,6 @@ void wifi_check_status(void *param) {
             colors[wifi_led] = col_good;
 
         } else {
-            // console.print("[N] Unable to reach network gateway...\n");
             colors[wifi_led] = col_bad;
             wifi_connected   = false;
             // wifi_setup(NULL);
@@ -226,26 +222,21 @@ void wifi_setup(void *param) {
     }
     wifi_setup_running = true;
 
-    // console.print("[N] Configuring WiFi...\n");
     colors[wifi_led] = col_waiting;
     if (WiFi.status() == WL_NO_SHIELD) {
-        // console.print("[N] WiFi shield not present.\n");
         colors[wifi_led]   = col_bad;
         wifi_connected     = false;
         wifi_setup_running = false;
         return;
     }
-    // console.print("[N] Scanning for networks...\n");
     auto cnt = WiFi.scanNetworks();
     if (!cnt) {
-        // console.print("[N] No networks found.\n");
         colors[wifi_led]   = col_bad;
         wifi_connected     = false;
         wifi_setup_running = false;
         return;
     } else {
         colors[wifi_led] = col_working;
-        // console.printf("[N] Found %d networks\n", cnt);
         if (Serial) {
             Serial.printf("%32s %5s %17s %2s %4s\n", "SSID", "ENC", "BSSID        ", "CH", "RSSI");
         }
@@ -260,10 +251,8 @@ void wifi_setup(void *param) {
 
     if (!wifi_ap_configured) {
 #ifdef STASSID
-        // console.printf("[N] Adding network: %s\n", ssid);
         if (multi.addAP(ssid, password)) {
 #    ifdef SECSSID
-            // console.printf("[N] Adding network: %s\n", ssid2);
             if (multi.addAP(ssid2, password2)) {
 #    endif
                 wifi_ap_configured = true;
@@ -275,7 +264,6 @@ void wifi_setup(void *param) {
     }
 
     if (multi.run() != WL_CONNECTED) {
-        // console.print("[N] Unable to connect to network.\n");
         colors[wifi_led]   = col_bad;
         wifi_connected     = false;
         wifi_setup_running = false;
@@ -283,7 +271,6 @@ void wifi_setup(void *param) {
     }
     wifi_connected   = true;
     colors[wifi_led] = col_good;
-    // console.print("[N] WiFi connected.\n");
     wifi_configured    = true;
     wifi_setup_running = false;
 }
@@ -297,7 +284,6 @@ void ntp_setup(void *param) {
     ntp_setup_running = true;
     if (wifi_configured && !ntp_configured) {
         colors[ntp_led] = col_working;
-        // console.print("[T] Configuring NTP...\n");
         NTP.begin(NTP_SERVER1, NTP_SERVER2, NTP_TIMEOUT);
         if (NTP.running()) {
             colors[ntp_led] = col_good;
@@ -312,7 +298,7 @@ void ntp_setup(void *param) {
             Serial.print(asctime(&timeinfo));
         }
         ntp_configured = true;
-        // console.print("[T] NTP comfigured.\n");
     }
     ntp_setup_running = false;
 }
+
