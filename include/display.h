@@ -1,4 +1,4 @@
-// Copyright (c) 2022 Jan Lindblom <jan@namnlos.co>
+// Copyright (c) 2023 Jan Lindblom <jan@namnlos.co>
 //
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT

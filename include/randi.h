@@ -1,9 +1,7 @@
-// Copyright (c) 2022 Jan Lindblom <jan@namnlos.co>
+// Copyright (c) 2023 Jan Lindblom <jan@namnlos.co>
 //
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
-
-#include "arduino_secrets.h"
 
 #define NEOPIXEL_PIN (2u)
 #define NUM_LEDS 8
@@ -32,24 +30,7 @@
 #define FLIP180 0
 #define INVERT 0
 
-// Time stuff
-#ifndef NTP_SERVER1
-#    define NTP_SERVER1 "0.fi.pool.ntp.org"
-#endif
-#ifndef NTP_SERVER2
-#    define NTP_SERVER2 "1.fi.pool.ntp.org"
-#endif
-#define NTP_TIMEOUT 3600
-
-// WiFi stuff
-#ifndef STASSID
-#    define STASSID "no-network"
-#    define STAPSK "no-password"
-#endif
+extern volatile uint32_t colors[];
 
 void neopixel_setup(void *param);
 void neopixel_update(void *param);
-void wifi_setup(void *param);
-void wifi_check_status(void *param);
-void ntp_setup(void *param);
-
